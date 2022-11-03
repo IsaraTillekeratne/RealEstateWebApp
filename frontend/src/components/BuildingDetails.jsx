@@ -14,8 +14,30 @@ import {
     listAll,
 } from "firebase/storage";
 import { storage } from "../firebase";
+import Modal from '@mui/material/Modal';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '4px solid #0000FF',
+    boxShadow: 24,
+    p: 4,
+};
 
 export default function BuildingDetails(props) {
+    const [open, setOpen] = React.useState(false);
+    const [heading, setHeading] = React.useState("");
+    const [msg, setMsg] = React.useState("");
+    const handleOpen = (heading, msg) => {
+        setHeading(heading);
+        setMsg(msg);
+        setOpen(true);
+    }
+    const handleClose = () => setOpen(false);
     const navigate = useNavigate();
 
     const [buildingDetails, setBuildingDetails] = React.useState([]);
@@ -48,14 +70,17 @@ export default function BuildingDetails(props) {
     }, []); //RESOLVE dependancy warning
 
     const deleteBuilding = () => {
-        alert("You are about to delete a building!")
+        // alert("You are about to delete a building!")
+        handleOpen("Alert", "You are about to delete a building!")
         Axios.delete(`${process.env.REACT_APP_SERVER}/building/delete?id=${buildingId}`)
             .then((response) => {
 
-                alert(response.data)
-                navigate("../") // navigate to root
+                // alert(response.data)
+                handleOpen("Success", response.data)
+                // navigate("../") // navigate to root
             }).catch((e) => {
-                alert(e.response.data.error);
+                // alert(e.response.data.error);
+                handleOpen("Error", e.response.data.error)
 
             })
     }
@@ -127,6 +152,21 @@ export default function BuildingDetails(props) {
 
 
             </Container>
+            <Modal
+                open={open}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        {heading}
+                    </Typography>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                        {msg}
+                    </Typography>
+                </Box>
+            </Modal>
         </div>
     );
 }

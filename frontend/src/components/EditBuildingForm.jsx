@@ -13,8 +13,33 @@ import Axios from 'axios';
 // import { storage } from "../firebase";
 // import { v4 } from "uuid";
 import { buildingSchema } from '../Validations/newBuildingValidation';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Modal from '@mui/material/Modal';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: 'background.paper',
+    border: '4px solid #0000FF',
+    boxShadow: 24,
+    p: 4,
+};
 
 export default function EditBuildingForm(props) {
+
+    const [open, setOpen] = React.useState(false);
+    const [heading, setHeading] = React.useState("");
+    const [msg, setMsg] = React.useState("");
+    const handleOpen = (heading, msg) => {
+        setHeading(heading);
+        setMsg(msg);
+        setOpen(true);
+    }
+    const handleClose = () => setOpen(false);
 
     const [buildingDetails, setBuildingDetails] = React.useState([]);
     const buildingId = props.id;
@@ -104,13 +129,16 @@ export default function EditBuildingForm(props) {
 
             }).then((response) => {
 
-                alert(response.data)
+                // alert(response.data)
+                handleOpen("Success", response.data)
             }).catch((e) => {
 
-                alert(e.response.data.error);
+                // alert(e.response.data.error);
+                handleOpen("Error", e.response.data.error)
             })
         } else {
-            alert("Invalid input!")
+            // alert("Invalid input!")
+            handleOpen("Error", "Invalid input!")
         }
 
         // }
@@ -159,7 +187,7 @@ export default function EditBuildingForm(props) {
     //     // auto cropping
 
     // }
-    return (
+    return (<div>
         <Stack spacing={2} sx={{ marginTop: "25px" }}>
             <FormControl fullWidth >
                 <InputLabel htmlFor="outlined-adornment-amount">Name</InputLabel>
@@ -288,5 +316,21 @@ export default function EditBuildingForm(props) {
             <Button variant="contained" onClick={submitImages} type="submit">Upload images</Button> */}
 
         </Stack>
+        <Modal
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+        >
+            <Box sx={style}>
+                <Typography id="modal-modal-title" variant="h6" component="h2">
+                    {heading}
+                </Typography>
+                <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    {msg}
+                </Typography>
+            </Box>
+        </Modal>
+    </div>
     );
 }

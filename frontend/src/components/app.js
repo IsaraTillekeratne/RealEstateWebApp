@@ -5,6 +5,7 @@ import AddNewBuildingPage from '../pages/AddNewBuildingPage';
 import SearchBuildingPage from '../pages/SearchBuildingPage';
 import BuildingDetailsPage from '../pages/BuildingDetailsPage';
 import EditBuildingPage from '../pages/EditBuildingPage';
+import Home from '../pages/Home';
 // import { AuthContext } from '../Helpers/AuthContext';
 // import { useState, useEffect } from 'react';
 // import Axios from 'axios';
@@ -34,7 +35,7 @@ function app() {
         // <AuthContext.Provider value={{ authState, setAuthState }}>
         <Router>
             <Routes>
-                <Route path="/" element={<AddNewBuildingPage />} />
+                <Route path="/" element={<Home />} />
                 <Route path="/AddNewBuilding" element={<AddNewBuildingPage />} />
                 <Route path="/SearchBuilding" element={<SearchBuildingPage />} />
                 <Route path="/BuildingDetails/:pageName" element={<BuildingDetailsPage />} />

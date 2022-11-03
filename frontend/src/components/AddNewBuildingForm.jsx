@@ -93,7 +93,7 @@ export default function AddNewBuildingForm() {
         const isValid = await buildingSchema.isValid(formData);
         // use FORMIK to display errors on input validations
         console.log(isValid)
-        if (isValid === false) alert("Invalid Inputs!");
+        if (isValid === false) handleOpen("Error", "Invalid input!")
         else {
             if (typeof parseInt(values.year) === 'number' && typeof parseInt(values.numOfTowers) === 'number' && typeof parseInt(values.numOfUnits) === 'number') {
                 Axios.post(`${process.env.REACT_APP_SERVER}/building/add`, {
@@ -111,15 +111,18 @@ export default function AddNewBuildingForm() {
 
                 }).then((response) => {
 
-                    alert("Building added successfully!")
+                    // alert("Building added successfully!")
+                    handleOpen("Success", "Building added successfully!")
                     setInsertedId(response.data);
 
                 }).catch((e) => {
 
-                    alert(e.response.data.error);
+                    // alert(e.response.data.error);
+                    handleOpen("Error", e.response.data.error)
                 })
             } else {
-                alert("Invalid input!")
+                // alert("Invalid input!")
+                handleOpen("Error", "Invalid input!")
             }
 
         }
@@ -143,7 +146,8 @@ export default function AddNewBuildingForm() {
         const filePath = `buildingFloorPlans/${insertedId}/${fileFloorplan[0].name + v4()}`
         const imageRef = ref(storage, filePath);
         uploadBytes(imageRef, fileFloorplan[0]).then(() => {
-            alert("Floor plans uploaded!")
+            // alert("Floor plans uploaded!")
+            handleOpen("Success", "Floor plans uploaded!")
         });
         return filePath;
 
@@ -154,7 +158,8 @@ export default function AddNewBuildingForm() {
         const filePath = `buildingOtherFiles/${insertedId}/${fileOther[0].name + v4()}`
         const imageRef = ref(storage, filePath);
         uploadBytes(imageRef, fileOther[0]).then(() => {
-            alert("Other files uploaded!")
+            // alert("Other files uploaded!")
+            handleOpen("Success", "Other files uploaded!")
         });
         return filePath;
 
